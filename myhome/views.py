@@ -30,6 +30,23 @@ def home(request):
 
     return render(request, 'home.html', context)
 
+def event(request):
+
+    myvar = 'this text is actually pulled from the server'
+    now = datetime.now().strftime('%Y-%m-%d %H:%M')
+
+    context = {
+        "myvar": myvar,
+        "testing": google_pull(),
+        "client_id": "225698428296-4vug4vo8o2na8gm2bfk32deaqrqhqb5j.apps.googleusercontent.com",
+        "tasks":[
+                {"id": 1, "name":"New Job", "description": "I want this job", "startdate": now, "enddate": now, "status": "completed"  }
+            ]
+
+    }
+
+    return render(request, 'event.html', context)
+
 #class Home2(View):
 #
 #    def get(self, request, *args, **kwargs):
