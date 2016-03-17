@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="static/css/style.css">
+
+
+
+	<!-- Tasks API START-->
+
+	<script type="text/javascript">
+      // Your Client ID can be retrieved from your project in the Google
+      // Developer Console, https://console.developers.google.com
+      var CLIENT_ID = '{{ client_id }}';
+
+      var OTHER_ID = '';
+
+      var SCOPES = ['https://www.googleapis.com/auth/tasks.readonly'];
+
+      /**
+       * Check if current user has authorized this application.
+       */
+      function checkAuth() {
+        gapi.auth.authorize(
+          {
+            'client_id': CLIENT_ID,
+            'scope': SCOPES.join(' '),
+            'immediate': true
+          }, handleAuthResult);
+      }
+
+      /**
+       * Handle response from authorization server.
+       *
+       * @param {Object} authResult Authorization result.
+       */
+      function handleAuthResult(authResult) {
+        var authorizeDiv = document.getElementById('authorize-div');
+        if (authResult && !authResult.error) {
+          // Hide auth UI, then load client library.
+          authorizeDiv.style.display = 'none';
+          loadTasksApi();
+        } else {
+          // Show auth UI, allowing the user to initiate authorization by
+          // clicking authorize button.
+          authorizeDiv.style.display = 'inline';
+        }
+      }
+
+      /**
+       * Initiate auth flow in response to user clicking authorize button.
+       *
+       * @param {Event} event Button click event.
+       */
+      function handleAuthClick(event) {
+        gapi.auth.authorize(
+          {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
+          handleAuthResult);
+        return false;
+      }
+
+      /**
+       * Load Google Tasks API client library.
+       */
+      function loadTasksApi() {
+        gapi.client.load('tasks', 'v1', listAll);
+      }
+
+      /**
+       * Print task lists.
+       */
+      function listTaskLists() {
+        var request = gapi.client.tasks.tasklists.list({
+            'maxResults': 10
+          });
+
+          request.execute(function(resp) {
+            appendPre('Task Lists:');
+            var taskLists = resp.items;
+            if (taskLists && taskLists.length > 0) {
+              for (var i = 0; i < taskLists.length; i++) {
+                var taskList = taskLists[i];
+                appendPre(taskList.title + ' (' + taskList.id + ')');
+                console.log(resp);
+              }
+              el = document.getElementById('load_btn');
+              el.classList.remove("hidden");
+            } else {
+              appendPre('No task lists found.');
+            }
+          });
+      }
+
+
+      /**
+       * Print task lists showing every tasks
+       */
+       function listAll(){
+        var request1 = gapi.client.tasks.tasklists.list({
+            'maxResults': 10
+          });
+
+          request1.execute(function(resp) {
+            appendPre('Task Lists:');
+            var taskLists = resp.items;
+            if (taskLists && taskLists.length > 0) {
+              for (var i = 0; i < taskLists.length; i++) {
+                var taskList = taskLists[i];
+                //appendPre(taskList.title + ' (' + taskList.id + ')');
+                listTasks(taskList.id);
+              }
+
+            } else {
+              appendPre('No task lists found.');
+            }
+          });
+
+       }
+
+      /**
+       * Print tasks
+       */
+      function listTasks(id) {
+
+        var request = gapi.client.tasks.tasks.list({
+            'path': '/plus/v1/tasks',
+            'tasklist': id,
+            'maxResults': 10
+          });
+
+          request.execute(function(resp) {
+            appendPre('Tasks:');
+            var tasks = resp.items;
+            if (tasks && tasks.length > 0) {
+              for (var i = 0; i < tasks.length; i++) {
+                var tasks = tasks[i];
+                appendPre(''+tasks.title+' (' + tasks.id + ')');
+                appendPost('<td>'+tasks.title+'</td> \
+                            <td>'+tasks.notes+'</td> \
+                            <td>'+tasks.updated+'</td> \
+                            <td>'+tasks.due+'</td> \
+                            <td>'+tasks.status+'</td>');
+
+              }
+              el = document.getElementById('load_btn');
+              el.classList.remove("hidden");
+            } else {
+              appendPre('No task lists found.');
+            }
+          });
+      }
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var pre = document.getElementById('output');
+        var textContent = document.createTextNode(message + '\n');
+        //pre.appendChild(textContent);
+      }
+
+      function appendPost(message){
+          var post = document.getElementById('data-list');
+          var textContent = document.createElement('tr');
+          textContent.innerHTML = message;
+          post.appendChild(textContent);
+      }
+
+
+
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=checkAuth">
+    </script>
+
+
+	<!-- Tasks API END -->
+
+
+
+	<title>Cesar's env</title>
+</head>
+<body>
+
+	<div class="container">
+	    <center>
+			<h2>Task for Mr. Khan</h2>
+			<span>This will interact with the API of google calendar to import tasks to local database.</span><br>
+			<span>By Cesar Herrera  AKA cesarherreralic</span>
+		</center>
+
+        <br>
+        <center>
+			<div id="authorize-div" style="display: none">
+              <span>Authorize access to Google Tasks API</span>
+              <!--Button for the user to click to initiate auth sequence -->
+              <button id="authorize-button" onclick="handleAuthClick(event)">
+                Authorize
+              </button>
+            </div>
+            <pre id="output"></pre>
+		</center>
+
+        <br>
+		<center>
+			<h3>Google Calendar Tasks Data</h3>
+			<span>The first One is pulled from server (but not pulled from Google's API)</span>
+		</center>
+
+		<div class="row">
+	        <div class="col-xs-2 box">
+	        </div>
+	        <div class="col-xs-8 box">
+	            <table class="table table-bordered">
+					<thead>
+						<tr>
+							<th><strong>Name</strong></th>
+							<th><strong>Description</strong></th>
+							<th><strong>Start Date</strong></th>
+							<th><strong>End Date</strong></th>
+							<th><strong>Status</strong></th>
+						</tr>
+					</thead>
+					<tbody id="data-list" class="first-tbody">
+					    {% for e in tasks %}
+                        <tr>
+                            <td>{{ e.name }}</td>
+                            <td>{{ e.description }}</td>
+                            <td>{{ e.startdate }}</td>
+                            <td>{{ e.enddate }}</td>
+                            <td>{{ e.status }}</td>
+                        </tr>
+                        {% endfor %}
+					</tbody>
+				</table>
+	        </div>
+	        <div class="col-xs-2 box">
+	        </div>
+	    </div>
+
+
+
+	</div>
+	<script src="static/js/jquery-2.1.3.min.js"></script>
+	<script src="static/js/script.js"></script>
+</body>
+</html>
