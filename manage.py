@@ -13,5 +13,10 @@ import sys
 #import settings
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mysite.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
     management.execute_from_command_line(sys.argv)
+
+#import settings
+
+#if __name__ == "__main__":
+#    execute_manager(settings)

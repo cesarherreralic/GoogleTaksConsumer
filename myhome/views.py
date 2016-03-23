@@ -8,7 +8,7 @@ from django.views.generic import View, FormView,TemplateView,DeleteView
 
 from django.http import HttpResponse
 
-from mysite.myhome import pull
+from myhome import pull
 from pull import *
 
 from datetime import datetime

@@ -10,7 +10,7 @@ class Task(models.Model):
     description = models.TextField(blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    completed = models.BooleanField(blank=True, null=True)
+    completed = models.NullBooleanField(blank=True)
 
 class UserManager(BaseUserManager):
 

@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'mysite.middleware.SecureRequiredMiddleware',
+#'mysite.middleware.SecureRequiredMiddleware',
 )
 
 HTTPS_SUPPORT = True
@@ -115,9 +115,10 @@ SECURE_REQUIRED_PATHS = (
     '/conference/',
 )
 
-ROOT_URLCONF = 'mysite.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
+    '/home/cesarherreralic/mysite/myhome/templates/',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -131,17 +132,17 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     #'south',
-    'mysite.portafolio',
-    'mysite.myhome',
+    #'mysite.portafolio',
+    'myhome',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
 
-SOUTH_DATABASE_ADAPTERS = {
-            'default': 'south.db.sqlite3'
-            }
+#SOUTH_DATABASE_ADAPTERS = {
+#            'default': 'south.db.sqlite3'
+#            }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
