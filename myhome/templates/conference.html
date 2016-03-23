@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/style.css">
+
+	<!-- Conference API START-->
+    <script src='../static/js/opentok.min.js'></script>
+
+
+	<!-- Tasks API END -->
+    <script>
+        var apiKey = "45533672";
+        var sessionId = "2_MX40NTUzMzY3Mn5-MTQ1ODI3ODkzODE5OH5ncGFNY1VxZUt5NVJqVWNRQXdKbk9Vemd-UH4";
+
+        var token = "T1==cGFydG5lcl9pZD00NTUzMzY3MiZzaWc9MDBiYmI2NGFkODI1ZWM5MzBhOTUzYjQyOTA2YjBmZDViYzhkZGUwNDpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5UVXpNelkzTW41LU1UUTFPREkzT0Rrek9ERTVPSDVuY0dGTlkxVnhaVXQ1TlZKcVZXTlJRWGRLYms5VmVtZC1VSDQmY3JlYXRlX3RpbWU9MTQ1ODI3OTAxNSZub25jZT0wLjY2NTk3NjU5NjQ1ODA3ODUmZXhwaXJlX3RpbWU9MTQ1ODg4MzcxMyZjb25uZWN0aW9uX2RhdGE9";
+
+        var session = OT.initSession(apiKey, sessionId);
+
+        var publisherOptions = {
+            insertMode: 'append',
+            width: 300,
+            height: 200
+        };
+
+
+
+        session.connect(token, function(err){
+            if(err){
+                console.log('please try to connect later...');
+            }else{
+                var publisher = OT.initPublisher('videolist', publisherOptions);
+                session.publish(publisher);
+            }
+        });
+
+        session.on("streamCreated", function(event){
+            session.subscribe( event.stream, 'videolist', {insertMode: 'append',width: 300, height: 200} );
+        });
+
+    </script>
+
+
+	<title>Cesar's env</title>
+</head>
+<body>
+
+	<div class="container">
+	    <center>
+			<h2>Video conference for Mr. Khan</h2>
+			<span>This will interact with the API of TokBox.</span><br>
+			<span>By Cesar Herrera  AKA cesarherreralic</span>
+		</center>
+
+		<div class="row">
+	        <div class="col-xs-2 box">
+	        </div>
+	        <div class="col-xs-8 box">
+	            <center>
+                <div id="videolist">
+
+
+                </div>
+                </center>
+	        </div>
+	        <div class="col-xs-2 box">
+	        </div>
+	    </div>
+
+
+
+	</div>
+	<script src="../static/js/jquery-2.1.3.min.js"></script>
+	<script src="../static/js/script.js"></script>
+</body>
+</html>

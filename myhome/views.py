@@ -47,6 +47,15 @@ def event(request):
 
     return render(request, 'event.html', context)
 
+
+def conference(request):
+
+    context = {
+        "user_id": 'name pulled from db',
+    }
+
+    return render(request, 'conference.html', context)
+
 #class Home2(View):
 #
 #    def get(self, request, *args, **kwargs):

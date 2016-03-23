@@ -1,3 +1,8 @@
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
+import sys
+
 # Django settings for mysite project.
 
 DEBUG = True
@@ -102,6 +107,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'mysite.middleware.SecureRequiredMiddleware',
+)
+
+HTTPS_SUPPORT = True
+SECURE_REQUIRED_PATHS = (
+    '/conference/',
 )
 
 ROOT_URLCONF = 'mysite.urls'
@@ -119,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'south',
     'mysite.portafolio',
     'mysite.myhome',
     # Uncomment the next line to enable the admin:
@@ -126,6 +138,10 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+SOUTH_DATABASE_ADAPTERS = {
+            'default': 'south.db.sqlite3'
+            }
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

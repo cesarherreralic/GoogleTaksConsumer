@@ -9,3 +9,14 @@
 body{
     background: rgb(132, 186, 211);
 }
+
+#videolist{
+    display: flex;
+}
+
+#videolist > div{
+    float: left;
+    display: inline;
+    margin-left: auto;
+    margin-right: auto;
+}
