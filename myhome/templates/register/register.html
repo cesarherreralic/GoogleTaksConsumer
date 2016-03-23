@@ -1,0 +1,86 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/style.css">
+
+	<title>Cesar's env</title>
+</head>
+<body>
+
+	<div class="container">
+	    <center>
+			<h2>Task for Mr. Khan</h2>
+			<span>Register Form</span><br>
+			<span>By Cesar Herrera  AKA cesarherreralic</span>
+		</center>
+
+        <br>
+		<center>
+			<h3>Register Form </h3>
+		</center>
+
+		<div class="row">
+	        <div class="col-xs-2 box">
+	        </div>
+	        <div class="col-xs-8 box">
+
+                <div class="form-box panel-responsive" id="login-box">
+                    <form action="/register/" method="post" autocomplete="off" novalidate>
+                    	{% csrf_token %}
+                      <div class="panel panel-default" style="box-shadow: 0 0px 0px rgba(0, 0, 0, 0.0)">
+                        <div class="panel-heading panel-header">
+                          <h5>Sign in</h5>
+                        </div>
+                        <div class="panel-body bg-gray">
+                          <div class="form-group">
+                            <label for="firstname">Firstmame</label>
+                            {{form.firstname}}
+                          </div>
+                          <div class="form-group">
+                            <label for="lastname">Lastname</label>
+                            {{form.lastname}}
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputEmail1">Username</label>
+                           	{{form.username}}
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Email</label>
+                            {{form.email}}
+                          </div>
+                          <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            {{form.password}}
+                          </div>
+                        </div>
+                        <div class="panel-body bg-gray" style="background-color: #F9F9F9; margin-bottom:5px;" >
+                          <div class="col-md-12" style="margin-bottom: -35px; ">
+                          	<div class="row text-danger">
+                  						{{ form.non_field_errors }}
+                  					</div>
+        					          <br>
+                            <button type="submit" class="btn btn-primary btn-block"> Sign in </button>
+                            <br>
+
+                            <br>
+                          </div>
+                          </div>
+                      </div>
+                    </form>
+                </div>
+
+	        </div>
+	        <div class="col-xs-2 box">
+	        </div>
+	    </div>
+
+
+
+	</div>
+	<script src="../static/js/jquery-2.1.3.min.js"></script>
+	<script src="../static/js/script.js"></script>
+</body>
+</html>

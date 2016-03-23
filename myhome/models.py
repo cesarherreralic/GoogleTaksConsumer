@@ -79,7 +79,7 @@ class UserManager(BaseUserManager):
         return user
 
 
-class Usuario(AbstractBaseUser):
+class User(AbstractBaseUser):
     username = models.CharField(max_length=255, unique=True)
     firstname = models.CharField(max_length=255, blank=True, null=True)
     lastname = models.CharField(max_length=255, blank=True, null=True)
