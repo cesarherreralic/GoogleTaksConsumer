@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../static/css/style.css">
+
+	<title>Sea3D loader</title>
+
+	<style>
+		body { margin: 0; }
+		canvas { width: 100%; height: 100% }
+	</style>
+</head>
+<body>
+
+	<div class="container">
+		<center>
+			<h1>Sea3D object loader for Mr. Alican Yeksan</h1>
+			<p>By Cesar Herrera AKA cesarherreralic</p>
+			<p><a href="http://fiverr.com/cesarherreralic" >Profile on Fiverr</a></p>
+		</center>
+
+
+
+
+	</div>
+	<!--<script src="js/jquery-2.1.3.min.js"></script>-->
+	<!--<script src="js/script.js"></script>-->
+
+	<script src="../static/js/three.min.js"></script>
+
+	<script src="../static/js/MorphAnimMesh.js"></script>
+	<script src="../static/js/loaders/collada/Animation.js"></script>
+	<script src="../static/js/loaders/collada/AnimationHandler.js"></script>
+	<script src="../static/js/loaders/collada/KeyFrameAnimation.js"></script>
+
+	<script src="../static/js/controls/OrbitControls.js"></script>
+
+	<script src="../static/js/postprocessing/EffectComposer.js"></script>
+	<script src="../static/js/postprocessing/RenderPass.js"></script>
+	<script src="../static/js/postprocessing/ShaderPass.js"></script>
+	<script src="../static/js/postprocessing/MaskPass.js"></script>
+	<script src="../static/js/shaders/CopyShader.js"></script>
+	<script src="../static/js/shaders/ColorCorrectionShader.js"></script>
+	<script src="../static/js/shaders/VignetteShader.js"></script>
+
+
+	<script src="../static/js/loaders/sea3d/SEA3D.js"></script>
+	<script src="../static/js/loaders/sea3d/SEA3DLZMA.js"></script>
+	<script src="../static/js/loaders/sea3d/SEA3DLoader.js"></script>
+
+	<script src="../static/js/Detector.js"></script>
+	<script src="../static/js/libs/stats.min.js"></script>
+
+
+	<script>
+		if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+		var container, stats;
+		var camera, scene, renderer, composer, controls;
+		var loader;
+		// Initialize Three.JS
+		init();
+		//
+		// SEA3D Loader
+		//
+		loader = new THREE.SEA3D( {
+			autoPlay : true, // Auto play animations
+			container : scene // Container to add models
+		} );
+		loader.onComplete = function( e ) {
+			// Get camera from SEA3D Studio
+			// use loader.get... to get others objects
+			var cam = loader.getCamera( "Camera007" );
+			camera.position.copy( cam.position );
+			camera.rotation.copy( cam.rotation );
+			controls = new THREE.OrbitControls( camera );
+			animate();
+		};
+		loader.load( '../static/mascot.tjs.sea' );
+		//loader.load( '../static/test_01.tjs.sea' );
+
+		function init() {
+			scene = new THREE.Scene();
+			container = document.createElement( 'div' );
+			document.body.appendChild( container );
+			camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 10000 );
+			camera.position.set( 1000, - 300, 1000 );
+			renderer = new THREE.WebGLRenderer();
+			renderer.setPixelRatio( window.devicePixelRatio );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setClearColor( 0x333333, 1 );
+			container.appendChild( renderer.domElement );
+			stats = new Stats();
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			container.appendChild( stats.domElement );
+			// post-processing
+			composer = new THREE.EffectComposer( renderer );
+			var renderPass = new THREE.RenderPass( scene, camera );
+			var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+			composer.addPass( renderPass );
+			var vh = 1.4, vl = 1.2;
+			var colorCorrectionPass = new THREE.ShaderPass( THREE.ColorCorrectionShader );
+			colorCorrectionPass.uniforms[ "powRGB" ].value = new THREE.Vector3( vh, vh, vh );
+			colorCorrectionPass.uniforms[ "mulRGB" ].value = new THREE.Vector3( vl, vl, vl );
+			composer.addPass( colorCorrectionPass );
+			var vignettePass = new THREE.ShaderPass( THREE.VignetteShader );
+			vignettePass.uniforms[ "darkness" ].value = 1.0;
+			composer.addPass( vignettePass );
+			composer.addPass( copyPass );
+			copyPass.renderToScreen = true;
+			// extra lights
+			scene.add( new THREE.AmbientLight( 0x333333 ) );
+			// events
+			window.addEventListener( 'resize', onWindowResize, false );
+		}
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			composer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setSize( window.innerWidth, window.innerHeight );
+		}
+		//
+		var clock = new THREE.Clock();
+		function animate() {
+			var delta = clock.getDelta();
+			requestAnimationFrame( animate );
+			// Update SEA3D Animations
+			THREE.SEA3D.AnimationHandler.update( delta );
+			// Update Three.JS Animations
+			THREE.AnimationHandler.update( delta );
+			render( delta );
+			stats.update();
+		}
+		function render( dlt ) {
+			//renderer.render( scene, camera );
+			composer.render( dlt );
+		}
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<!--<script>
+		// Our Javascript will go here.
+
+		var scene = new THREE.Scene();
+		var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+		var renderer = new THREE.WebGLRenderer();
+		renderer.setSize( window.innerWidth, window.innerHeight );
+		document.body.appendChild( renderer.domElement );
+
+		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		var cube = new THREE.Mesh( geometry, material );
+		//scene.add( cube );
+
+		camera.position.z = 5;
+
+
+		function render() {
+			requestAnimationFrame( render );
+			cube.rotation.x += 0.01;
+			cube.rotation.y += 0.01;
+			renderer.render( scene, camera );
+		}
+
+
+
+		var loader = new THREE.JSONLoader(); // init the loader util
+
+		// init loading
+		loader.load('./test_01.sea', function (geometry) {
+		  // create a new material
+		  /*var material = new THREE.MeshLambertMaterial({
+		    //map: THREE.ImageUtils.loadTexture('path_to_texture'),  // specify and load the texture
+		    colorAmbient: [0.480000026226044, 0.480000026226044, 0.480000026226044],
+		    colorDiffuse: [0.480000026226044, 0.480000026226044, 0.480000026226044],
+		    colorSpecular: [0.8999999761581421, 0.8999999761581421, 0.8999999761581421]
+		  });*/
+
+			var material2 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+
+		  // create a mesh with models geometry and material
+		  var mesh = new THREE.Mesh(
+		    geometry,
+		    material2
+		  );
+
+		  mesh.rotation.y = -Math.PI/5;
+
+		  scene.add(mesh);
+		});
+
+
+
+		render();
+
+	</script>-->
+
+
+</body>
+</html>

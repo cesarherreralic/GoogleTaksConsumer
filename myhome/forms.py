@@ -31,7 +31,7 @@ class AutenticationUserForm(forms.Form):
     def clean(self):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
-        usuario = authenticate(username=username, password=password)
+        user = authenticate(username=username, password=password)
 
 
         if not username and not password:
@@ -65,20 +65,3 @@ class UserForm(ModelForm):
             raise forms.ValidationError(u"Password is required")
         return data
 
-    def clean_correo_electronico(self):
-        data=self.cleaned_data['correo_electronico']
-        if not data :
-            raise forms.ValidationError(u"El correo electronico es obligatorio para el registro en el sistema")
-        try:
-            Usuario.objects.get(correo_electronico=data)
-            raise forms.ValidationError(u"El correo electronico ya ha sido registrado anteriormente")
-        except Usuario.DoesNotExist:
-            pass
-
-        try:
-            Usuario.objects.get(correo_secundario=data)
-            raise forms.ValidationError(u"El correo electronico ya ha sido registrado anteriormente")
-        except Usuario.DoesNotExist:
-            pass
-
-        return data
