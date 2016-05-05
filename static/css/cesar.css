@@ -270,7 +270,19 @@ ol, ul {
 }
 
 
+.title-center{
+    text-align: center;
+}
 
+.title-center h4{
+    font-size: 30px;
+    font-weight: 700;
+}
+
+.title-center h5{
+    font-size: 24px;
+    font-weight: 600;
+}
 
 
 
